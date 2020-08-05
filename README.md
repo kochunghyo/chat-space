@@ -17,8 +17,7 @@
 
 |Column|Type|Options|
 |------|----|-------|
-|groups_name|string|null: false|
-|members_name|string|null: false|
+|name|string|null: false|
 
 ### Association 
 - has_many :messages
@@ -31,7 +30,7 @@
 |Column|Type|Options|
 |------|----|-------|
 |body|text|null: false|
-|image|string|
+|image|string||
 |user_id|integer|null: false, foreign_key: true|
 |group_id|integer|null: false, foreign_key: true|
 
