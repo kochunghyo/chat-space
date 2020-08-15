@@ -11,8 +11,8 @@
 
   .side-bar__group-list
     - current_user.groups.each do |group|
-    .side-bar__contents
-      = link_to "#", class: "group" do
-        .side-bar__contents__name
-      = group.name
-        .side-bar__contents__message
+      .side-bar__contents
+        = link_to "#", class: "group" do
+          .side-bar__contents__name
+            = group.name
+          .side-bar__contents__message
