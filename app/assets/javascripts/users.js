@@ -10,7 +10,9 @@ $(function(){
   }
 
   function addNoUser() {
+    let html = `
                 <div class="ChatMember">
+                  <p class="ChatMember__name">ユーザーが見つかりません</p>
                 </div>
                 `;
     $("#UserSearchResult").append(html);
