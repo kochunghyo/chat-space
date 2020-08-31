@@ -2,7 +2,7 @@ $(function(){
   function buildHTML(message){
     if ( message.image ) {
       let html =
-        `<div class="chat-box__top">
+        `<div class="chat-box__top" data-message-id=${message.id}>
             <div class="chat-name">
               ${message.user_name}
             </div>
@@ -20,7 +20,7 @@ $(function(){
       return html;
     } else {
       let html =
-       `<div class="chat-box__top">
+       `<div class="chat-box__top" data-message-id=${message.id}>
           <div class="chat-name">
             ${message.user_name}
           </div>
@@ -35,32 +35,30 @@ $(function(){
         </div>
       </div>`
       return html;
-    };
+    }; 
   }
-
-  $('.form').on('submit', function(e){
-    e.preventDefault();
-    let formData = new FormData(this)
-    let url = $(this).attr('action')
+  
+  let reloadMessages = function() {
+    let last_message_id = $('.chat-box__top:last').data("message-id") || 0;
     $.ajax({
-      url: url,
-      type: "POST",
-      data: formData,
+      url: "api/messages",
+      type: 'get',
       dataType: 'json',
-      processData: false,
-      contentType: false
+      data: {id: last_message_id}
     })
-    .done(function(data){
-      let html = buildHTML(data);
-      $('.chat-main__message-list').append(html);
-      $('.chat-main__message-list').animate({ scrollTop: $('.chat-main__message-list')[0].scrollHeight});
-      $('form')[0].reset();  
+    .done(function(messages) {
+      if (messages.length !== 0) {
+        let insertHTML = '';
+        $.each(messages, function(i, message) {
+          insertHTML += buildHTML(message)
+        });
+        $('.chat-main__message-list').append(insertHTML);
+        $('.chat-main__message-list').animate({ scrollTop: $('.chat-main__message-list')[0].scrollHeight});
+      }
     })
     .fail(function() {
-      alert("メッセージ送信に失敗しました"); 
-    })
-    .always(function(){
-      $('.submit-btn').prop("disabled", false); 
+      alert('error');
     });
-  });
+  };
+  setInterval(reloadMessages, 7000);
 });
